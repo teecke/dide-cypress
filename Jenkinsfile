@@ -5,12 +5,16 @@
 // Initialize global config
 cfg = jplConfig('dide-cypress', 'docker', '', [email: env.CITEECKE_NOTIFY_EMAIL_TARGETS])
 
-def publishDockerImage() {
-    nextReleaseNumber = sh (script: "kd get-next-release-number .", returnStdout: true).trim().substring(1)
+def publishDockerImage(nextReleaseNumber = "") {
+    if (nextReleaseNumber == "") {
+        nextReleaseNumber = sh (script: "kd get-next-release-number .", returnStdout: true).trim().substring(1)
+    }
     docker.withRegistry("https://registry.hub.docker.com", 'teeckebot-docker-credentials') {
-        def customImage = docker.build("teecke/dide-cypress:${nextReleaseNumber}", "--pull --no-cache .")
+        def customImage = docker.build("teecke/${cfg.projectName}:${nextReleaseNumber}", "--pull --no-cache .")
         customImage.push()
-        customImage.push('latest')
+        if (nextReleaseNumber != "beta") {
+            customImage.push('latest')
+        }
     }
 }
 
@@ -34,7 +38,7 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    docker.build('teecke/dide-cypress:test', '--pull --no-cache .')
+                    publishDockerImage("beta")
                 }
             }
         }
