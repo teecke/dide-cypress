@@ -8,7 +8,7 @@ cfg = jplConfig('dide-cypress', 'docker', '', [email: env.CITEECKE_NOTIFY_EMAIL_
 def publishDockerImage() {
     nextReleaseNumber = sh (script: "kd get-next-release-number .", returnStdout: true).trim().substring(1)
     docker.withRegistry("https://registry.hub.docker.com", 'teeckebot-docker-credentials') {
-        def customImage = docker.build("kairops/dide-cypress:${nextReleaseNumber}", "--pull --no-cache .")
+        def customImage = docker.build("teecke/dide-cypress:${nextReleaseNumber}", "--pull --no-cache .")
         customImage.push()
         customImage.push('latest')
     }
@@ -34,7 +34,7 @@ pipeline {
             agent { label 'docker' }
             steps {
                 script {
-                    docker.build('kairops/dide-cypress:test', '--pull --no-cache .')
+                    docker.build('teecke/dide-cypress:test', '--pull --no-cache .')
                 }
             }
         }
