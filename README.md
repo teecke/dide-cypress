@@ -1,3 +1,7 @@
+# DEPRECATED
+
+Please use https://github.com/tpbtools/dide-cypress
+
 # Duing IDE for Cypress
 
 Cypress IDE based on Duing Desktop
