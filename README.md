@@ -1,6 +1,6 @@
 # DEPRECATED
 
-Please use https://github.com/tpbtools/dide-cypress
+Please visit https://github.com/ayudadigital/dide-cypress
 
 # Duing IDE for Cypress
 
